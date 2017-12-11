@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Gpio;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -24,8 +26,25 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+
+        $schedule->call(function () {
+           
+            $gpios = Gpio::where('type', 'Out')->get();
+            
+            foreach ($gpios as $gpio) {
+                
+                echo "\n";
+                echo $gpio->cmd;
+                $out = exec("$gpio->cmd");
+                echo "\n";
+                if(preg_match("'^Temp=([0-9\.]+),Humidity=([0-9\.]+)'", $out,$result))
+                {
+                        echo "$result[1] $result[2]";
+                }
+                
+            }
+            
+        })->everyMinute();        
     }
 
     /**
