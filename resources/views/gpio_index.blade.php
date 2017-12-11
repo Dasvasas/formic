@@ -24,7 +24,16 @@
                                 <td>{{ $gpio->pin }}</td>
                                 <td>{{ $gpio->name }}</td>
                                 <td>{{ $gpio->cmd }}</td>
-                                <td><a href="{{ route('gpio.edit', ['gpio' => $gpio->id]) }}">[Edit]</a></td>
+                                <td>
+                                    <a href="{{ route('gpio.edit', ['gpio' => $gpio->id]) }}">[Edit]</a>
+                                    
+                                    {!! Form::open([
+                                        'route'     => ['gpio.destroy', $gpio->id],
+                                        'method'    => 'DELETE'
+                                    ]) !!}
+                                    {!! Form::submit('Удалить', array('class' => 'btn btn-primary')) !!}
+                                    {!! Form::close() !!}
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
