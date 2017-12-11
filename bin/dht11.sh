@@ -1,4 +1,6 @@
 #!/bin/bash
 
 
-echo "Temp=24,Humidity=35";
+t=$((1 + RANDOM % 9))
+h=$((1 + RANDOM % 9))
+echo "Temp=2${t},Humidity=3${h}";

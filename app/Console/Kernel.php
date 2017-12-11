@@ -7,6 +7,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Gpio;
 
+use InfluxDB;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -33,14 +35,28 @@ class Kernel extends ConsoleKernel
             
             foreach ($gpios as $gpio) {
                 
-                echo "\n";
-                echo $gpio->cmd;
+//                echo "\n";
+//                echo $gpio->cmd;
                 $out = exec("$gpio->cmd");
-                echo "\n";
+//                echo "\n";
                 if(preg_match("'^Temp=([0-9\.]+),Humidity=([0-9\.]+)'", $out,$result))
                 {
-                        echo "$result[1] $result[2]";
+//                        echo "$result[1] $result[2]";
+                    $points = array(
+                        new InfluxDB\Point(
+                            'test_metric2',
+                            null,
+                            ['gpio' => $gpio->name],
+                            ['temp' => (int) $result[1], 'humidity' => (int) $result[2]],
+                            time()
+                        ),
+                    );
+
+                    $result = InfluxDB::writePoints($points, \InfluxDB\Database::PRECISION_SECONDS);                    
+                    
                 }
+                
+
                 
             }
             
