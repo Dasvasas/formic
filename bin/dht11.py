@@ -20,12 +20,13 @@
 #
 #--------------------------------------
 import Adafruit_DHT
+import sys
 
 # Set sensor type : Options are DHT11,DHT22 or AM2302
 sensor = Adafruit_DHT.DHT11
 
 # Set GPIO sensor is connected to
-gpio = 17
+gpio = sys.argv[1]
 
 # Use read_retry method. This will retry up to 15 times to
 # get a sensor reading (waiting 2 seconds between each retry).

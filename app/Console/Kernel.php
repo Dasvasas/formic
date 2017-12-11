@@ -34,14 +34,14 @@ class Kernel extends ConsoleKernel
             $gpios = Gpio::where('type', 'Out')->get();
             
             foreach ($gpios as $gpio) {
+
+                $cmd = $gpio->cmd;
+                $cmd = str_replace("{pin}", $gpio->pin, $cmd);
+
+                $out = exec($cmd);
                 
-//                echo "\n";
-//                echo $gpio->cmd;
-                $out = exec("$gpio->cmd");
-//                echo "\n";
-                if(preg_match("'^Temp=([0-9\.]+),Humidity=([0-9\.]+)'", $out,$result))
+                if(preg_match("'^Temp=([0-9\.]+),Humidity=([0-9\.]+)'", $out, $result))
                 {
-//                        echo "$result[1] $result[2]";
                     $points = array(
                         new InfluxDB\Point(
                             'test_metric2',
@@ -52,11 +52,8 @@ class Kernel extends ConsoleKernel
                         ),
                     );
 
-                    $result = InfluxDB::writePoints($points, \InfluxDB\Database::PRECISION_SECONDS);                    
-                    
+                    InfluxDB::writePoints($points, \InfluxDB\Database::PRECISION_SECONDS);
                 }
-                
-
                 
             }
             
