@@ -11,18 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
+    
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     Route::resource('gpio', 'GpioController');
     
     Route::resource('formic', 'FormicController');
-    
+
 });
