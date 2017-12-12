@@ -14,6 +14,7 @@
                             <tr>
                                 <th>№ Pin</th>
                                 <th>Название</th>
+                                <th>Тип</th>
                                 <th>Команда</th>
                                 <th></th>
                             </tr>
@@ -23,15 +24,21 @@
                             <tr>
                                 <td>{{ $gpio->pin }}</td>
                                 <td>{{ $gpio->name }}</td>
+                                <td>{{ $gpio->type }}</td>
                                 <td>{{ $gpio->cmd }}</td>
                                 <td>
-                                    <a href="{{ route('gpio.edit', ['gpio' => $gpio->id]) }}">[Edit]</a>
+                                    {!! Form::open([
+                                        'route'     => ['gpio.edit', $gpio->id],
+                                        'method'    => 'GET'
+                                    ]) !!}
+                                    {!! Form::submit('e', array('class' => 'btn btn-success btn-sm')) !!}
+                                    {!! Form::close() !!}
                                     
                                     {!! Form::open([
                                         'route'     => ['gpio.destroy', $gpio->id],
                                         'method'    => 'DELETE'
                                     ]) !!}
-                                    {!! Form::submit('Удалить', array('class' => 'btn btn-primary')) !!}
+                                    {!! Form::submit('х', array('class' => 'btn btn-danger btn-sm')) !!}
                                     {!! Form::close() !!}
                                 </td>
                             </tr>
