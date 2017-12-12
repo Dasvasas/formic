@@ -23,4 +23,6 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('gpio', 'GpioController');
     
+    Route::resource('formic', 'FormicController');
+    
 });

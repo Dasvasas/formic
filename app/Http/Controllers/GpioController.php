@@ -42,5 +42,5 @@ class GpioController extends Controller
         Gpio::destroy($router->input('gpio'));
 
         return redirect()->route('gpio.index');
-    }    
+    }
 }

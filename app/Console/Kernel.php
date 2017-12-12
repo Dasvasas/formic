@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Gpio;
+use App\Metric;
 
 use InfluxDB;
 
@@ -42,12 +43,21 @@ class Kernel extends ConsoleKernel
                 
                 if(preg_match("'^Temp=([0-9\.]+),Humidity=([0-9\.]+)'", $out, $result))
                 {
+                    $temperature = (int) $result[1];
+                    $humidity    = (int) $result[2];
+                    
+                    Metric::create([
+                        'gpios_id' => $gpio->id,
+                        'temperature' => $temperature,
+                        'humidity' => $humidity
+                    ]);
+                    
                     $points = array(
                         new InfluxDB\Point(
                             'test_metric2',
                             null,
                             ['gpio' => $gpio->name],
-                            ['temp' => (int) $result[1], 'humidity' => (int) $result[2]],
+                            ['temp' => $temperature, 'humidity' => $humidity],
                             time()
                         ),
                     );
